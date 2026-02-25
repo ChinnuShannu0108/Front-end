@@ -1,0 +1,240 @@
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Attendance Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    h1{
+        text-align: center;
+    }
+    h3 ,#presentList , #absentList {
+        text-align: left;
+    }
+    p{
+        text-align: left;
+    }
+    .btn{
+        outline: none;
+        width: 10px;
+        height: 20px;
+        background: transparent;
+        color: rgb(4, 115, 0);
+    }
+    button{
+        outline: none;
+
+    }
+    body {
+
+    width: 90vw;
+    text-align: center;
+    background-color: green;
+    outline: none;
+     font-family:'Segoe UI', Tahoma, Verdana, sans-serif; 
+     /* font-weight: bold; */
+     padding: 10px;
+}
+.student {
+  display: flex;
+  justify-content: space-between;
+ 
+  margin: 10px 0;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.btn {
+  width: 35px;
+  height: 35px;
+  font-size: 20px;
+  border: none;
+  background: lightgray;
+  border-radius: 6px;
+}
+.btn:hover {
+  transition: all 0.5s ease-in-out;
+  /* width: 35px;
+  height: 35px;
+  font-size: 20px;
+  border: none;
+  border-radius: 6px; */
+}
+.present{
+  background: lightgreen; 
+  /* background: rgb(84, 236, 84);  */
+    }
+.absent{
+     background: lightcoral; 
+    }
+
+#bttn {
+  margin-top: 15px;
+  padding: 8px 12px;
+  background-color: #125dad;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+#bttn:hover{
+    background: #01448b;
+    /* transform:scale(1.1); */
+    
+    transition: all 0.9s ease-in-out;
+
+}
+select option{
+    border-radius: 25px;
+    text-align: center;
+    border-radius: 25px;
+    background: transparent;
+    text-align: starts;
+}
+select{
+    font-display: block;
+    outline: none;
+    width: 30vw;
+    height: 3.5vh;
+    border: none;
+    background-color: rgb(13, 204, 204);
+    border-radius: 25px;
+    box-shadow: none;
+
+}
+h2{
+    position: relative;
+    top: -2vh;
+    text-align: center;
+    font-size: xx-large;
+    font-style:italic;
+}
+h3{
+    position: relative;
+    top: -4vh;
+    text-align: center;
+    
+    font-style:italic;
+}
+.summ{
+    position: relative;
+    top: 0.5vh;
+ text-align: left;   
+}
+</style>
+</head>
+<body>
+<h2 id="head">Vignan's Nirula Institute Of Technology & Science For Womens</h2>
+<h3>pedda palakaluru, Guntur-522009</h3>
+<h1>CSE Section-A</h1>
+
+<select id="modeSelect">
+    <option value="present">Mark Present</option>
+    <option value="absent">Mark Absent</option>
+</select>
+
+<div id="lis" ></div>
+
+<h3 class="summ">Summary</h3>
+<p>Present: <span id="presentList">Not Selected</span></p>
+<p>Absent: <span id="absentList">Nt Selected</span></p>
+<button id="bttn">Copy Attendance</button>
+
+<script>
+const rolls = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20',
+'21','22','23','24','25','26','27','28','29','30',
+'31','32','33','34','35','36','37','38','39','40',
+'41','42','43','44','45','46','47','48','49','50',
+'51','52','53','54','55','56','57','58','59','60'
+];
+const present = [];
+const absent = [];
+
+
+rolls.forEach(
+    r => 
+{
+  let div = document.createElement('d');
+  div.className = 'student';
+  div.innerHTML = `Roll No: ${r}
+  <button class="btn" onclick="mark('${r}', this)"></button>`;
+  document.getElementById('lis').appendChild(div);
+});
+
+// function mark(r, btn) 
+// {
+//   const mode = document.getElementById('modeSelect').value;
+
+//   if (mode === 'present') {
+//     if (!present.includes(r)) present.push(r);
+//     absent.splice(absent.indexOf(r), 1);
+//     btn.className = 'btn present';
+//     btn.innerHTML = '✔';
+//   } else {
+//     if (!absent.includes(r)) absent.push(r);
+//     present.splice(present.indexOf(r), 1);
+//     btn.className = 'btn absent';
+//     btn.innerHTML = '✖'; 
+// update();
+//}
+
+function mark(r, btn) 
+{
+  const mode = document.getElementById('modeSelect').value;
+
+  if (mode == 'present') {
+
+    if (btn.classList.contains('present')) {
+      present.splice(present.indexOf(r,1));
+      btn.className = 'btn';
+      btn.textContent = '';
+    } else {
+      if (!present.includes(r)) present.push(r);
+      const index = absent.indexOf(r);
+      if (index > -1) absent.splice(index, 1);
+
+      btn.className = 'btn present';
+      btn.textContent = '✔';
+    }
+
+  } else {
+
+    if (btn.classList.contains('absent')) {
+      absent.splice(absent.indexOf(r), 1);
+      btn.className = 'btn';
+      btn.textContent = '';
+    } else {
+      if (!absent.includes(r)) absent.push(r);
+      const index = present.indexOf(r);
+      if (index > -1) present.splice(index, 1);
+
+      btn.className = 'btn absent';
+      btn.textContent = '✖';
+    }
+
+  }
+
+  update();
+}
+
+function update() {
+  document.getElementById('presentList').textContent = present.length ? present.join(', ') : 'None';
+
+  document.getElementById('absentList').textContent = absent.length ? absent.join(', ') : 'None';
+}
+
+document.getElementById('bttn').onclick = function()
+{
+  const text = `Presenties: ${present.join(', ')}\nAbsenties: ${absent.join(', ')}`;
+  navigator.clipboard.writeText(text);
+  alert("Copied!");
+};
+</script>
+
+</body>
+</html>
+<!-- Presenties: 59, 58
+Absenties:  -->
